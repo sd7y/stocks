@@ -1,5 +1,6 @@
 package net.aplat.stocks.repo;
 
+import jakarta.transaction.Transactional;
 import net.aplat.stocks.entity.DailyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -10,4 +11,7 @@ public interface DailyRepository extends JpaRepository<DailyEntity, Long> {
     List<DailyEntity> findDailyEntitiesByTradeDate(LocalDate tradeDate);
 
     boolean existsByTradeDate(LocalDate tradeDate);
+
+    @Transactional
+    void deleteAllByTradeDate(LocalDate tradeDate);
 }

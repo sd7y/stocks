@@ -33,8 +33,14 @@ public class DailyService {
     public void fetchDaily(LocalDate startDate, LocalDate endDate, boolean force) {
         // tushare 一次最多可以获取 6000 条数据, 所以需要分批获取
         long numOfDays = ChronoUnit.DAYS.between(startDate, endDate) + 1;
+        LocalDate now = LocalDate.now();
         for (int i = 0; i < numOfDays; i++) {
             LocalDate date = startDate.plusDays(i);
+
+            if (date.isAfter(now)) {
+                logger.info("{} 是未来日期, 跳过请求", date);
+                continue;
+            }
 
             if (DateUtil.isWeekend(date)) {
                 logger.info("{} 是周末, 跳过请求", date);
@@ -42,7 +48,10 @@ public class DailyService {
             }
 
             // 检查数据库中是否有当天的数据
-            if (!force) {
+            if (force) {
+                logger.info("强制更新 {} 的数据.", date);
+                dailyRepository.deleteAllByTradeDate(date);
+            } else {
                 if (dailyRepository.existsByTradeDate(date)) {
                     logger.info("已存在 {} 的数据, 跳过请求.", date);
                     continue;
