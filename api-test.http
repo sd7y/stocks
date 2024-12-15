@@ -1,0 +1,7 @@
+### GET request to example server
+GET http://localhost:8080/daily/fetch/byDate?
+    startDate=20240101
+    &endDate=20241213
+    &force=false
+
+###

@@ -20,8 +20,9 @@ public class DailyController {
 
     @GetMapping("/fetch/byDate")
     public String fetchByDate(@RequestParam @DateTimeFormat(pattern = "yyyyMMdd") LocalDate startDate,
-                              @RequestParam @DateTimeFormat(pattern = "yyyyMMdd") LocalDate endDate) {
-        dailyService.fetchDaily(startDate, endDate);
+                              @RequestParam @DateTimeFormat(pattern = "yyyyMMdd") LocalDate endDate,
+                              @RequestParam(defaultValue = "false") Boolean force) {
+        dailyService.fetchDaily(startDate, endDate, force);
         return "ok";
     }
 
